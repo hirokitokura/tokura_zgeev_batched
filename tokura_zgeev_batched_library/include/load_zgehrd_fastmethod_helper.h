@@ -1,0 +1,16 @@
+handle->zgehrd_fastmethod[1] = TOKURA_ZGEHRD_FASTMETHOD_1;
+handle->zgehrd_fastmethod[2] = TOKURA_ZGEHRD_FASTMETHOD_2;
+handle->zgehrd_fastmethod[3] = TOKURA_ZGEHRD_FASTMETHOD_3;
+handle->zgehrd_fastmethod[4] = TOKURA_ZGEHRD_FASTMETHOD_4;
+handle->zgehrd_fastmethod[5] = TOKURA_ZGEHRD_FASTMETHOD_5;
+handle->zgehrd_fastmethod[6] = TOKURA_ZGEHRD_FASTMETHOD_6;
+handle->zgehrd_fastmethod[7] = TOKURA_ZGEHRD_FASTMETHOD_7;
+handle->zgehrd_fastmethod[8] = TOKURA_ZGEHRD_FASTMETHOD_8;
+handle->zgehrd_fastmethod[9] = TOKURA_ZGEHRD_FASTMETHOD_9;
+handle->zgehrd_fastmethod[10] = TOKURA_ZGEHRD_FASTMETHOD_10;
+handle->zgehrd_fastmethod[11] = TOKURA_ZGEHRD_FASTMETHOD_11;
+handle->zgehrd_fastmethod[12] = TOKURA_ZGEHRD_FASTMETHOD_12;
+handle->zgehrd_fastmethod[13] = TOKURA_ZGEHRD_FASTMETHOD_13;
+handle->zgehrd_fastmethod[14] = TOKURA_ZGEHRD_FASTMETHOD_14;
+handle->zgehrd_fastmethod[15] = TOKURA_ZGEHRD_FASTMETHOD_15;
+handle->zgehrd_fastmethod[16] = TOKURA_ZGEHRD_FASTMETHOD_16;

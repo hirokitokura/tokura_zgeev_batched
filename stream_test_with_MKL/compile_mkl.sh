@@ -1,0 +1,1 @@
+nvcc main.cu get_eig_MKL.c -L../tokura_zgeev_batched_library/bin/ -ltokurablas -I../tokura_zgeev_batched_library/include  -Xcompiler "-fopenmp" -m64 -I${MKLROOT}/include  --linker-options ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a,${MKLROOT}/lib/intel64/libmkl_sequential.a ${MKLROOT}/lib/intel64/libmkl_core.a

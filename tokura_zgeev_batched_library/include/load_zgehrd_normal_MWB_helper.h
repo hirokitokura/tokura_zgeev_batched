@@ -1,0 +1,16 @@
+handle->zgehrd_normal_MWB[1] = TOKURA_ZGEHRD_NORMAL_MWB_1;
+handle->zgehrd_normal_MWB[2] = TOKURA_ZGEHRD_NORMAL_MWB_2;
+handle->zgehrd_normal_MWB[3] = TOKURA_ZGEHRD_NORMAL_MWB_3;
+handle->zgehrd_normal_MWB[4] = TOKURA_ZGEHRD_NORMAL_MWB_4;
+handle->zgehrd_normal_MWB[5] = TOKURA_ZGEHRD_NORMAL_MWB_5;
+handle->zgehrd_normal_MWB[6] = TOKURA_ZGEHRD_NORMAL_MWB_6;
+handle->zgehrd_normal_MWB[7] = TOKURA_ZGEHRD_NORMAL_MWB_7;
+handle->zgehrd_normal_MWB[8] = TOKURA_ZGEHRD_NORMAL_MWB_8;
+handle->zgehrd_normal_MWB[9] = TOKURA_ZGEHRD_NORMAL_MWB_9;
+handle->zgehrd_normal_MWB[10] = TOKURA_ZGEHRD_NORMAL_MWB_10;
+handle->zgehrd_normal_MWB[11] = TOKURA_ZGEHRD_NORMAL_MWB_11;
+handle->zgehrd_normal_MWB[12] = TOKURA_ZGEHRD_NORMAL_MWB_12;
+handle->zgehrd_normal_MWB[13] = TOKURA_ZGEHRD_NORMAL_MWB_13;
+handle->zgehrd_normal_MWB[14] = TOKURA_ZGEHRD_NORMAL_MWB_14;
+handle->zgehrd_normal_MWB[15] = TOKURA_ZGEHRD_NORMAL_MWB_15;
+handle->zgehrd_normal_MWB[16] = TOKURA_ZGEHRD_NORMAL_MWB_16;
