@@ -71,3 +71,10 @@ __Return value__
  * [in/out] `work` cuDoubleComplex*, This is a temporary work space. Should be allocated a memory size which is equal or more than  `tokura_get_zgeeveigenvaluesgetworspacesize`.
  * [out] `flag` char*, This is flags. If eigenvalues of j-th metrix is computed, flag[j] is 0, otherwise flag[j] is not 0.
  * [in] `cudastream` cudaStream_t, This is used for asynchronous computation. If synchronous computation is preferred, cudastream should be NULL.
+
+
+# Limitation
+* Computer Capability >= 3.0 (CUDA 9.x no longer supports previous hardware).
+* The matrix size n is 1 <= n <= 64.
+* Balancing is not performed.
+
