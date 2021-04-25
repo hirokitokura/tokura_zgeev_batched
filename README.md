@@ -23,6 +23,30 @@ An exmaple code is provided at stream_test_with_MKL which computes all eigenvalu
 
 
 # Functions
+`int tokuraCreate(tokurablas_t** handle)`
+This function allocates a handler for this library.
+
+__Arguments__
+* [in/out] `handle` tokurablas_t*, This is a handler for this library.
+---
+
+`int tokuraDestroy(tokurablas_t* handle)`
+This function frees a handler.
+
+__Arguments__
+* [in/out] `handle` tokurablas_t*, This is a handler for this library.
+---
+`size_t tokura_get_zgeeveigenvaluesgetworspacesize(int n, int batch_count)`
+This function returns a temporary work space size for tokura_zgeev_batched_gpu.
+
+__Arguments__
+* [in] `n` int, The order of a matrix. Should be 1<=n<=64.
+* [in] `batch_count` int, The number of metrices.
+
+__Return value__
+* size_t, a temporary work space size for tokura_zgeev_batched_gpu.
+
+---
 `int tokura_zgeev_batched_gpu
 (
 	tokurablas_t* handle,
@@ -40,8 +64,8 @@ An exmaple code is provided at stream_test_with_MKL which computes all eigenvalu
  
  __Arguments__
  * [in] `handle` tokurablas_t*, This is a handler for tokura_zgeev_batched_gpu.
- * [in] `n` INTEGER, The order of a matrix. Should be 1<=n<=64.
- * [in] `batch_count` INTEGER, The number of metrices.
+ * [in] `n` int, The order of a matrix. Should be 1<=n<=64.
+ * [in] `batch_count` int, The number of metrices.
  * [in/out] `A` cuDoubleComplex*, A pointer to cuDoubleComplex array which contain all metrices. Each matrix is stored one by one and elements of each matrix are stored in column-major order. After call tokura_zgeev_batched_gpu, do not use any element of A.
  * [out] `eigenvalues` cuDoubleComplex*, A pointer to cuDoubleComplex array which contain all eigenvalues. i-th eigenvalue of j-th matrix can be access by `eigenvalues[i+j*n]`.
  * [in/out] `work` cuDoubleComplex*, This is a temporary work space. Should be allocated a memory size which is equal or more than  `tokura_get_zgeeveigenvaluesgetworspacesize`.
