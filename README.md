@@ -19,7 +19,31 @@ MIT
   *  libtokurablas.so will be generated at tokura_zgeev_batched_library/bin .
 
 # Example source code
-An exmaple code is provided at stream_test_with_MKL which computes all eigenvalues of many small real non-hermitian matrices on the gpu and output a maximum relative error vs intel MKL.
+An exmaple code is provided at stream_test_with_MKL which computes all eigenvalues of many small non-hermitian matrices on the gpu and output a maximum relative error vs intel MKL.
 
 
 # Functions
+`int tokura_zgeev_batched_gpu
+(
+	tokurablas_t* handle,
+	int n,
+	int batch_count,
+	cuDoubleComplex* A,
+	cuDoubleComplex* eigenvalues,
+	cuDoubleComplex* work,
+	char* flag,
+	cudaStream_t cudastream
+ )`
+ 
+ This function computes all eigenvalues for n-by-n non-hermitian matrices.
+ No eigenvectors are computed.
+ 
+ __Arguments__
+ * [in] `handle` tokurablas_t*, This is a handler for tokura_zgeev_batched_gpu.
+ * [in] `n` INTEGER, The order of a matrix. Should be 1<=n<=64.
+ * [in] `batch_count` INTEGER, The number of metrices.
+ * [in/out] `A` cuDoubleComplex*, A pointer to cuDoubleComplex array which contain all metrices. Each matrix is stored one by one and elements of each matrix are stored in column-major order. After call tokura_zgeev_batched_gpu, do not use any element of A.
+ * [out] `eigenvalues` cuDoubleComplex*, A pointer to cuDoubleComplex array which contain all eigenvalues. i-th eigenvalue of j-th matrix can be access by `eigenvalues[i+j*n]`.
+ * [in/out] `work` cuDoubleComplex*, This is a temporary work space. Should be allocated a memory size which is equal or more than  `tokura_get_zgeeveigenvaluesgetworspacesize`.
+ * [out] `flag` char*, This is flags. If eigenvalues of j-th metrix is computed, flag[j] is 0, otherwise flag[j] is not 0.
+ * [in] `cudastream` cudaStream_t, This is used for asynchronous computation. If synchronous computation is preferred, cudastream should be NULL.
