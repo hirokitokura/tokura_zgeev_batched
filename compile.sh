@@ -14,12 +14,9 @@ cp tokura_zgehrd_parameters.h ../include
 rm *
 
 cd ../src
-
-
-nvcc *.cu -I/home/tokura/tokura_blas/tokura_zgeev_batched_library/include     -DTOKURA_ZGEEV_BATCHED_HSEQR_TUNING -o ../bin/zhseqr_tune.out
+nvcc *.cu -I../include     -DTOKURA_ZGEEV_BATCHED_HSEQR_TUNING -o ../bin/zhseqr_tune.out
 
 cd ../bin
-
 ./zhseqr_tune.out
 
 cp load_zhseqr_normal_MWB_helper.h ../src
@@ -29,9 +26,7 @@ cp tokura_zhseqr_parameters.h ../include
 rm *
 
 cd ../src
-
-nvcc -shared *.cu -I/home/tokura/tokura_blas/tokura_zgeev_batched_library/include  -o ../bin/libtokurablas.so -Xcompiler "-fPIC" 
-
+nvcc -shared *.cu -I../include  -o ../bin/libtokurablas.so -Xcompiler "-fPIC" 
 
 cd ../../
 cd tokura_zgeev_batched_library_test
