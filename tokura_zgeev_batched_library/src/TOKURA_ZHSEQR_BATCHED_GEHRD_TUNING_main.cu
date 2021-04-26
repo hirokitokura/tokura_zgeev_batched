@@ -104,11 +104,11 @@ int main(void)
 	normal_MWB_threads = (int*)malloc(sizeof(int) * (TOKURA_ZGEEV_BATCHED_MAX_MATRIX_SIZE + 1));
 	memset(normal_MWB_threads, 0, sizeof(int) * (TOKURA_ZGEEV_BATCHED_MAX_MATRIX_SIZE + 1));
 
-	/*ŽžŠÔŒv‘ª—p*/
+	/*ï¿½ï¿½ï¿½ÔŒvï¿½ï¿½ï¿½p*/
 	cudaEvent_t start, stop;
 	float elapsed_time_ms = 0.0f;
 
-	/*ŽžŠÔŒv‘ª—p*/
+	/*ï¿½ï¿½ï¿½ÔŒvï¿½ï¿½ï¿½p*/
 	cudaEventCreate(&start);
 	cudaEventCreate(&stop);
 
@@ -215,21 +215,15 @@ int main(void)
 				normal_MWB_threads[matrix_size] = threads_per_matrix;
 				min_time = normal_MWB_time[matrix_size];
 			}
-		//	printf("%d: %f\n",  handle->zhseqr_normal_MWB[handle->zgeev_n], normal_MWB_time[matrix_size]);
-
 		}
 		normal_MWB_time[matrix_size] = min_time;
 		handle->zhseqr_normal_MWB[handle->zgeev_n] = normal_MWB_threads[matrix_size];
-	//	printf("%d %d %f\n", handle->zgeev_n, handle->zhseqr_normal_MWB[handle->zgeev_n], normal_MWB_time[matrix_size]);
 
 		cudaFree(matrices_gpu);
 		cudaFree(srcmatrices_gpu);
 		cudaFree(workmatrices_gpu);
 		cudaFree(myeigenvalues);
 		cudaFree(flag);
-
-
-
 	}
 
 
@@ -237,14 +231,6 @@ int main(void)
 	write_zhseqr_parameters(handle);
 
 	zhseqr_heder_gen();
-
-
-
-
-
-
-
-
 
 	cudaEventDestroy(start);
 	cudaEventDestroy(stop);

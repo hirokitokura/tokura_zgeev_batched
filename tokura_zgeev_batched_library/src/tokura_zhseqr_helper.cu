@@ -21,14 +21,9 @@ void getandset_optimul_method_for_zhseqr(tokurablas_t* handle)
 	case ZHSEQR_NORMAL_MWB:
 		handle->nexttmatrixarrange = ElementWise;
 		handle->execstatus = TOKURA_BLAS_SUCCESS;
-
-	//	printf("getandset_optimul_method_for_zhseqr:ZHSEQR_NORMAL_MWB: %d -> %d\n", handle->currentmatrixarrange, handle->nexttmatrixarrange);
-
 		break;
 
-
 	default:
-		//printf("getandset_optimul_method_for_zhseqr: %d\n", nextHSEQR_method);
 		handle->execstatus = TOKURA_BLAS_FAIL;
 		break;
 	}
@@ -37,21 +32,15 @@ void getandset_optimul_method_for_zhseqr(tokurablas_t* handle)
 }
 void tokura_zhseqr_helper(tokurablas_t* handle)
 {
-//	printf("getandset_optimul_method_for_zhseqr start\n");
-//	printf("IN getandset_optimul_method_for_zhseqr:ZHSEQR_NORMAL_MWB: %d -> %d\n", handle->currentmatrixarrange, handle->nexttmatrixarrange);
-
 	getandset_optimul_method_for_zhseqr(handle);
 	if (TOKURA_BLAS_SUCCESS != handle->execstatus)
 	{
 		return;
 	}
-//	printf("tokura_matrix_rearrangements_helper start\n");
 
 	tokura_matrix_rearrangements_helper(handle);
 	if (TOKURA_BLAS_SUCCESS != handle->execstatus)
 	{
-	//	printf("tokura_matrix_rearrangements_helper ERROR\n");
-
 		return;
 	}
 
@@ -59,15 +48,11 @@ void tokura_zhseqr_helper(tokurablas_t* handle)
 	switch (ZHSEQR_NORMAL_MWB)
 	{
 	case ZHSEQR_NORMAL_MWB:
-		//printf("tokura_zhseqr_normal_MWB_helper \n");
-
 		tokura_zhseqr_normal_MWB_helper(handle);
 		break;
 
 
 	default:
-		//	printf("tokura_matrix_rearrangements_helper ERROR\n");
-
 		break;
 	}
 

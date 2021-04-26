@@ -3,23 +3,18 @@
 #include<string.h>
 #include<math.h>
 
-
-
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <cuComplex.h>
 
 #include <tokura_blas.h>
 
-
-
 #ifndef TOKURA_ZGEEV_BATCHED_GEHRD_TUNING
 void load_zgehrd_normal_MWB(tokurablas_t* handle)
 {
 
-	//’ÊíHRDŽÀ‘•
+	//ï¿½Êï¿½HRDï¿½ï¿½ï¿½ï¿½
 	#include"load_zgehrd_normal_MWB_helper.h"
-
 
 	handle->execstatus = TOKURA_BLAS_SUCCESS;
 
@@ -27,10 +22,8 @@ void load_zgehrd_normal_MWB(tokurablas_t* handle)
 void load_zgehrd_shared_MWB(tokurablas_t* handle)
 {
 
-	//sharedƒƒ‚ƒŠHRDŽÀ‘•
+	//sharedï¿½ï¿½ï¿½ï¿½ï¿½ï¿½HRDï¿½ï¿½ï¿½ï¿½
 	#include"load_zgehrd_shared_MWB_helper.h"
-
-
 
 	handle->execstatus = TOKURA_BLAS_SUCCESS;
 
@@ -39,10 +32,8 @@ void load_zgehrd_shared_MWB(tokurablas_t* handle)
 void load_zgehrd_fastmethod(tokurablas_t* handle)
 {
 
-	//’ÊíHRDŽÀ‘•
+	//ï¿½Êï¿½HRDï¿½ï¿½ï¿½ï¿½
 	#include"load_zgehrd_fastmethod_helper.h"
-
-
 
 	handle->execstatus = TOKURA_BLAS_SUCCESS;
 
@@ -53,10 +44,8 @@ void load_zgehrd_fastmethod(tokurablas_t* handle)
 #if !defined(TOKURA_ZGEEV_BATCHED_GEHRD_TUNING) && !defined(TOKURA_ZGEEV_BATCHED_HSEQR_TUNING)
 void load_zhseqr_normal_MWB(tokurablas_t* handle)
 {
-
-	//’ÊíHRDŽÀ‘•
+	//ï¿½Êï¿½HRDï¿½ï¿½ï¿½ï¿½
 #include"load_zhseqr_normal_MWB_helper.h"
-
 
 	handle->execstatus = TOKURA_BLAS_SUCCESS;
 
@@ -65,20 +54,15 @@ void load_zhseqr_normal_MWB(tokurablas_t* handle)
 
 void load_zhseqr_fastmethod(tokurablas_t* handle)
 {
-
 #include"load_zgehrd_fastmethod_helper.h"
-
-
 	handle->execstatus = TOKURA_BLAS_SUCCESS;
 
 }
-
 #endif
 
 
 int tokuraCreate(tokurablas_t** handle_)
 {
-	//printf("HELLO!!\n");
 	tokurablas_t* handle;
 
 	handle = (tokurablas_t *)malloc(sizeof(tokurablas_t));
@@ -144,8 +128,6 @@ int tokuraCreate(tokurablas_t** handle_)
 	{
 		return 1;
 	}
-
-	//load_zgehrd_matrixarrange(handle);
 	if (TOKURA_BLAS_SUCCESS != handle->execstatus)
 	{
 		return 1;
@@ -239,7 +221,6 @@ int tokura_zgeev_batched_gpu
 	cudaStream_t cudastream
 )
 {
-	//printf("HELLO\n");
 	handle->zgeev_n = matrix_size;
 	handle->zgeev_batchcount = mat_num;
 	handle->zgeev_srcmatrices = mymatrix_input;
@@ -253,8 +234,6 @@ int tokura_zgeev_batched_gpu
 	handle->execstatus = TOKURA_BLAS_SUCCESS;
 	handle->stream= cudastream;
 
-
-	
 	if (handle == NULL)
 	{
 		return -1;
@@ -271,7 +250,6 @@ int tokura_zgeev_batched_gpu
 	{
 		return -4;
 	}
-
 	if (work == NULL)
 	{
 		return -5;
@@ -285,27 +263,17 @@ int tokura_zgeev_batched_gpu
 		return -7;
 	}
 
-
-
-	//printf("tokura_zgehrd_helper start\n");
-
 	tokura_zgehrd_helper(handle);
 	if (TOKURA_BLAS_SUCCESS != handle->execstatus)
 	{
 		return 1;
 	}
-	//printf("tokura_zhseqr_helper start\n");
 
 	tokura_zhseqr_helper(handle);
 	if (TOKURA_BLAS_SUCCESS != handle->execstatus)
 	{
 		return 2;
 	}
-
-
-
-	//printf("tokura_eigenvaluesrearrangement_for_output start\n");
-
 
 	tokura_eigenvaluesrearrangement_for_output(handle);
 	if (TOKURA_BLAS_SUCCESS != handle->execstatus)
@@ -314,6 +282,4 @@ int tokura_zgeev_batched_gpu
 	}
 
 	return 0;
-
-
 }

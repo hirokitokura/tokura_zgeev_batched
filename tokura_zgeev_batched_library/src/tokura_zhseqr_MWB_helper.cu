@@ -19,11 +19,9 @@ void tokura_zhseqr_normal_MWB_helper(tokurablas_t* handle)
 
 	dim3 thread_num(TARGET_CUDA_WARP, handle->zhseqr_normal_MWB[handle->zgeev_n]);
 	dim3 block_num((handle->zgeev_batchcount + thread_num.x - 1) / thread_num.x);
-	//printf("%d %d %d\n", thread_num.x, thread_num.y, thread_num.z);
 
 	int shared_size = sizeof(int) * (handle->zgeev_n + 1) * thread_num.x
 		+ sizeof(int) * thread_num.x;
-	//printf("tokura_zhseqr_normal_MWB_kernel start\n");
 
 	if (handle->stream == NULL)
 	{
@@ -53,13 +51,13 @@ void tokura_zhseqr_normal_MWB_helper(tokurablas_t* handle)
 	}
 	
 
-	cudaDeviceSynchronize();
+	/*cudaDeviceSynchronize();
 	{
 		cudaError_t err2 = cudaGetLastError();
 		if (err2 != cudaSuccess) {
 			gpuErrchk(err2);
 		}
-	}
+	}*/
 	handle->currentmatrixarrange = handle->nexttmatrixarrange;
 	handle->nexttmatrixarrange = NotSet;
 	handle->execstatus = TOKURA_BLAS_SUCCESS;

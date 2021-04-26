@@ -47,14 +47,14 @@ __device__ cuDoubleComplex compute_alpha(const cuDoubleComplex target_element, c
 	return alpha;
 }
 
-//ƒnƒEƒXƒzƒ‹ƒ_[ƒxƒNƒgƒ‹¶¬ƒfƒoƒCƒXŠÖ”
+//ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½oï¿½Cï¿½Xï¿½Öï¿½
 __device__ void construct_householdervector
 (
 	const int target_row_index,
 	const int matrix_size,
 	const int mat_num,
 	const cuDoubleComplex* __restrict__  mymatrix,
-	cuDoubleComplex* house_vector_shared,//ƒnƒEƒXƒzƒ‹ƒ_[ƒxƒNƒgƒ‹
+	cuDoubleComplex* house_vector_shared,//ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½xï¿½Nï¿½gï¿½ï¿½
 	double* reduction_shared,
 	const int MWB_reduction_thread_num,
 	const int WARP_SIZE_ON_MWB
@@ -65,8 +65,8 @@ __device__ void construct_householdervector
 	cuDoubleComplex alpha;
 	int index;
 	int index_house;
-	//ƒ[ƒNƒXƒy[ƒX‚ÉƒxƒNƒgƒ‹‚ğƒRƒs[‚·‚é
-	//ƒxƒNƒgƒ‹‚Ì2æ˜a‚ğŒvZ
+	//ï¿½ï¿½ï¿½[ï¿½Nï¿½Xï¿½yï¿½[ï¿½Xï¿½Éƒxï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½
+	//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½aï¿½ï¿½ï¿½vï¿½Z
 
 	index = ((target_row_index - 1) * matrix_size + (target_row_index + 1 + threadIdx.y)) * mat_num;
 	index_house = (target_row_index + 1 + threadIdx.y - 1) * WARP_SIZE_ON_MWB;
@@ -84,14 +84,14 @@ __device__ void construct_householdervector
 
 	reduction_shared[threadIdx.x + threadIdx.y * WARP_SIZE_ON_MWB] = householder_norm;
 	__syncthreads();
-	//ƒŠƒ_ƒNƒVƒ‡ƒ“‚ğs‚¤
+	//ï¿½ï¿½ï¿½_ï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 	householder_norm = sum_reduction(reduction_shared, MWB_reduction_thread_num, WARP_SIZE_ON_MWB);
 	__syncthreads();
 
 	if (threadIdx.y == 0)
 	{
 		tmp = mymatrix[((target_row_index - 1) * matrix_size + target_row_index) * mat_num];
-		//ƒxƒNƒgƒ‹‚ÌƒXƒJƒ‰”{‚ğŒvZ
+		//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÌƒXï¿½Jï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½vï¿½Z
 		//alpha = compute_alpha(tmp, sqrt(tmp.x * tmp.x + tmp.y * tmp.y + householder_norm));
 
 		if (householder_norm != 0.0)
@@ -116,7 +116,7 @@ __device__ void construct_householdervector
 		householder_norm=0.0;
 	}
 
-	//³‹K‰»
+	//ï¿½ï¿½ï¿½Kï¿½ï¿½
 	index_house = (target_row_index + threadIdx.y - 1) * WARP_SIZE_ON_MWB;
 	for (int i = target_row_index + threadIdx.y; i < matrix_size; i += blockDim.y)
 	{
@@ -174,8 +174,8 @@ __global__ void tokura_zgehrd_normal_MWB_kernel
 	cuDoubleComplex* mymatrix = &mymatrix_input[global_matrix_id];
 
 	extern __shared__ cuDoubleComplex shared_dynamic[];
-	cuDoubleComplex* house_vector_shared = &shared_dynamic[0];//ƒnƒEƒXƒzƒ‹ƒ_[ƒxƒNƒgƒ‹•Û‘¶—p
-	double* reduction_shared = (double*)& house_vector_shared[(matrix_size - 1) * MWB_WARP_SIZE];//ƒŠƒ_ƒNƒVƒ‡ƒ“—p
+	cuDoubleComplex* house_vector_shared = &shared_dynamic[0];//ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Û‘ï¿½ï¿½p
+	double* reduction_shared = (double*)& house_vector_shared[(matrix_size - 1) * MWB_WARP_SIZE];//ï¿½ï¿½ï¿½_ï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½p
 	cuDoubleComplex inner_product;
 	cuDoubleComplex tmp;
 	int index;
@@ -188,29 +188,15 @@ __global__ void tokura_zgehrd_normal_MWB_kernel
 		return;
 	}
 
-	/*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 0)
-	{
-		for (int i = 0; i < matrix_size; i++)
-		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-			}
-			printf("\n");
-		}
-		printf("\n");
-	}*/
-
-
 	const int MWB_reduction_thread_num = get_MWB_reduction_thread_num_device(blockDim.y);
 	__syncthreads();
 
 	for (int target_row_index = 1; target_row_index < matrix_size - 1; target_row_index++)
 	{
 
-		//ƒnƒEƒXƒzƒ‹ƒ_[ƒxƒNƒgƒ‹v‚ğŒvZ‚·‚é
-		//•¡‘f‹¤–ğ‚Í‚µ‚Ä‚¢‚È‚¢
-		//ÅŒã‚É2”{‚·‚×‚«
+		//ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½xï¿½Nï¿½gï¿½ï¿½vï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
+		//ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
+		//ï¿½ÅŒï¿½ï¿½2ï¿½{ï¿½ï¿½ï¿½×‚ï¿½
 		construct_householdervector
 		(
 			target_row_index,
@@ -223,11 +209,11 @@ __global__ void tokura_zgehrd_normal_MWB_kernel
 			MWB_WARP_SIZE
 		);
 
-		//‘Š—•ÏŠ·
-		//¶‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ÏŠï¿½
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 		for (int target_column_index_similar = target_row_index - 1 + threadIdx.y; target_column_index_similar < matrix_size; target_column_index_similar += blockDim.y)
 		{
-			//(v*,A)‚ÌŒvZ
+			//(v*,A)ï¿½ÌŒvï¿½Z
 			inner_product.x = 0.0;
 			inner_product.y = 0.0;
 
@@ -240,7 +226,7 @@ __global__ void tokura_zgehrd_normal_MWB_kernel
 				index_house += MWB_WARP_SIZE;
 			}
 
-			//A-2*V*(v*,A)‚ÌŒvZ
+			//A-2*V*(v*,A)ï¿½ÌŒvï¿½Z
 			inner_product.x *= 2.0;
 			inner_product.y *= 2.0;
 
@@ -262,10 +248,10 @@ __global__ void tokura_zgehrd_normal_MWB_kernel
 		__syncthreads();
 
 
-		//‰E‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+		//ï¿½Eï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 		for (int target_row_index_similar = threadIdx.y; target_row_index_similar < matrix_size; target_row_index_similar += blockDim.y)
 		{
-			//(A,v)‚ÌŒvZ
+			//(A,v)ï¿½ÌŒvï¿½Z
 			inner_product.x = 0.0;
 			inner_product.y = 0.0;
 
@@ -278,7 +264,7 @@ __global__ void tokura_zgehrd_normal_MWB_kernel
 				index_house += MWB_WARP_SIZE;
 			}
 
-			//A-2(A,v)v*‚ÌŒvZ
+			//A-2(A,v)v*ï¿½ÌŒvï¿½Z
 			inner_product.x *= 2.0;
 			inner_product.y *= 2.0;
 
@@ -298,30 +284,6 @@ __global__ void tokura_zgehrd_normal_MWB_kernel
 		}
 		__syncthreads();
 	}
-
-
-	/*if ( threadIdx.y == 0 )
-	{
-
-		for (int i = 0; i < matrix_size; i++)
-		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				if(isnan(mymatrix[(j * matrix_size + i) * mat_num].x))
-				{
-					printf("NAN \n");
-				}
-				if(isnan(mymatrix[(j * matrix_size + i) * mat_num].y))
-				{
-					printf("NAN \n");
-				}
-				//printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-			}
-			//printf("\n");
-		}
-		//printf("\n");
-	}*/
-
 }
 
 
@@ -343,8 +305,8 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 
 	extern __shared__ cuDoubleComplex shared_dynamic[];
 	cuDoubleComplex* matrix_shared = &shared_dynamic[0];
-	cuDoubleComplex* house_vector_shared = &matrix_shared[matrix_size * matrix_size * MWB_WARP_SIZE];//ƒnƒEƒXƒzƒ‹ƒ_[ƒxƒNƒgƒ‹•Û‘¶—p
-	double* reduction_shared = (double*)& house_vector_shared[(matrix_size - 1) * MWB_WARP_SIZE];//ƒŠƒ_ƒNƒVƒ‡ƒ“—p
+	cuDoubleComplex* house_vector_shared = &matrix_shared[matrix_size * matrix_size * MWB_WARP_SIZE];//ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Û‘ï¿½ï¿½p
+	double* reduction_shared = (double*)& house_vector_shared[(matrix_size - 1) * MWB_WARP_SIZE];//ï¿½ï¿½ï¿½_ï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½p
 	cuDoubleComplex inner_product;
 	cuDoubleComplex tmp;
 	int index;
@@ -358,19 +320,7 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 	}
 	const int MWB_reduction_thread_num = get_MWB_reduction_thread_num_device(blockDim.y);
 
-	/*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 0)
-	{
-		for (int i = 0; i < matrix_size; i++)
-		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-			}
-			printf("\n");
-		}
-		printf("\n");
-	}*/
-	//s—ñ‚ğ“Ç‚İ‚Ş
+	//ï¿½sï¿½ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
 	for (int k = threadIdx.y; k < matrix_size * matrix_size; k += blockDim.y)
 	{
 		/*int i = k % matrix_size;
@@ -380,25 +330,13 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 
 	}
 	__syncthreads();
-	//if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 0)
-	//{
-	//	for (int i = 0; i < matrix_size; i++)
-	//	{
-	//		for (int j = 0; j < matrix_size; j++)
-	//		{
-	//			printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-	//		}
-	//		printf("\n");
-	//	}
-	//	printf("\n");
-	//}
-	//__syncthreads();
+
 	for (int target_row_index = 1; target_row_index < matrix_size - 1; target_row_index++)
 	{
 
-		//ƒnƒEƒXƒzƒ‹ƒ_[ƒxƒNƒgƒ‹v‚ğŒvZ‚·‚é
-		//•¡‘f‹¤–ğ‚Í‚µ‚Ä‚¢‚È‚¢
-		//ÅŒã‚É2”{‚·‚×‚«
+		//ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½xï¿½Nï¿½gï¿½ï¿½vï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
+		//ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
+		//ï¿½ÅŒï¿½ï¿½2ï¿½{ï¿½ï¿½ï¿½×‚ï¿½
 		/*construct_householdervector_shared
 		(
 			target_row_index,
@@ -420,11 +358,11 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 			MWB_WARP_SIZE
 		);
 
-		//‘Š—•ÏŠ·
-		//¶‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ÏŠï¿½
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 		for (int target_column_index_similar = target_row_index - 1 + threadIdx.y; target_column_index_similar < matrix_size; target_column_index_similar += blockDim.y)
 		{
-			//(v*,A)‚ÌŒvZ
+			//(v*,A)ï¿½ÌŒvï¿½Z
 			inner_product.x = 0.0;
 			inner_product.y = 0.0;
 
@@ -439,7 +377,7 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 				index_house += MWB_WARP_SIZE;
 			}
 
-			//A-2*V*(v*,A)‚ÌŒvZ
+			//A-2*V*(v*,A)ï¿½ÌŒvï¿½Z
 			inner_product.x *= 2.0;
 			inner_product.y *= 2.0;
 
@@ -464,10 +402,10 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 		__syncthreads();
 
 
-		//‰E‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+		//ï¿½Eï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 		for (int target_row_index_similar = threadIdx.y; target_row_index_similar < matrix_size; target_row_index_similar += blockDim.y)
 		{
-			//(A,v)‚ÌŒvZ
+			//(A,v)ï¿½ÌŒvï¿½Z
 			inner_product.x = 0.0;
 			inner_product.y = 0.0;
 
@@ -482,7 +420,7 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 				index_house += MWB_WARP_SIZE;
 			}
 
-			//A-2(A,v)v*‚ÌŒvZ
+			//A-2(A,v)v*ï¿½ÌŒvï¿½Z
 			inner_product.x *= 2.0;
 			inner_product.y *= 2.0;
 
@@ -506,7 +444,7 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 		__syncthreads();
 
 	}
-	//s—ñ‚ğ‘‚«‚Ş
+	//ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (int k = threadIdx.y; k < matrix_size * matrix_size; k += blockDim.y)
 	{
 		/*int i = k % matrix_size;
@@ -516,18 +454,4 @@ __global__ void tokura_zgehrd_shared_MWB_kernel
 
 
 	}
-	//__syncthreads();
-	//if (threadIdx.x == 0 && threadIdx.y == 0 && threadIdx.x == 0)
-	//{
-	//	for (int i = 0; i < matrix_size; i++)
-	//	{
-	//		for (int j = 0; j < matrix_size; j++)
-	//		{
-	//			printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-	//		}
-	//		printf("\n");
-	//	}
-	//	printf("\n");
-	//}
-
 }

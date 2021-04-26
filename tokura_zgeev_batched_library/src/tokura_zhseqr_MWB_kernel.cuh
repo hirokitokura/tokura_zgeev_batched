@@ -49,12 +49,12 @@ __device__ void compute_eigenvalues_2_2(const int matrix_size, const int mat_num
 	inside_root = cuCadd(inside_root, tmp);
 
 
-	//À•”ŒvZ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
 	ans_root.x = inside_root.x + sqrt(inside_root.x * inside_root.x + inside_root.y * inside_root.y);
 	ans_root.x *= 0.5;
 	ans_root.x = sqrt(ans_root.x);
 
-	//‹••”ŒvZ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
 	ans_root.y = -inside_root.x + sqrt(inside_root.x * inside_root.x + inside_root.y * inside_root.y);
 	ans_root.y *= 0.5;
 	ans_root.y = sqrt(ans_root.y);
@@ -108,8 +108,6 @@ __device__ void compute_submatrix_eigenvalues
 		if (diag_index == submatrix_size)
 		{
 			myeigenvalues[submatrix_size * mat_num] = mymatrix[(submatrix_size * matrix_size + submatrix_size) * mat_num];
-			//printf("%f %f\n", myeigenvalues[submatrix_size * mat_num].x, myeigenvalues[submatrix_size * mat_num].y);
-
 			submatrix_size--;
 		}
 		else
@@ -122,11 +120,6 @@ __device__ void compute_submatrix_eigenvalues
 			myeigenvalues[(submatrix_size - 1) * mat_num] = eig_tmp[0];
 
 			submatrix_size -= 2;
-
-
-			//printf("%f %f\n", eig_tmp[1].x, eig_tmp[1].y);
-			//printf("%f %f\n", eig_tmp[0].x, eig_tmp[0].y);
-
 		}
 
 
@@ -141,7 +134,7 @@ __device__ int ignore_test_elementbyelement(cuDoubleComplex dest, cuDoubleComple
 {
 	int flag=0;
 	double tmp=0;
-	//À•”
+	//ï¿½ï¿½ï¿½ï¿½
 	if(sorce.x==0.0)
 	{
 		tmp=1.0;
@@ -155,7 +148,7 @@ __device__ int ignore_test_elementbyelement(cuDoubleComplex dest, cuDoubleComple
 		flag=1;
 	}
 
-	//‹••”
+	//ï¿½ï¿½ï¿½ï¿½
 	if(sorce.y==0.0)
 	{
 		tmp=1.0;
@@ -179,7 +172,7 @@ __device__ double compute_norm2
 {
 	double householder_norm = 0.0;
 
-	//“ñæ˜a‚ÌŒvZ
+	//ï¿½ï¿½ï¿½aï¿½ÌŒvï¿½Z
 	//for (int i = target_row_index; i < matrix_size; i++)
 	for (int i = matrix_size - 1; i >= 0; i--)
 	{
@@ -197,7 +190,7 @@ __device__ double compute_norm
 	double householder_norm = 0.0;
 
 	householder_norm = compute_norm2(workspace_zgehrd, matrix_size);
-	//•½•ûª‚ğ‚Æ‚é(ÉÙÑŒvZ)
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½(ï¿½ï¿½ÑŒvï¿½Z)
 	householder_norm = sqrt(householder_norm);
 
 	return householder_norm;
@@ -260,7 +253,7 @@ __device__ void bulge_generation_singleqr
 		}
 		householder_tau = ZERO_CUDOUBLECOMPLEX;
 		__syncthreads();
-		/*ZERO_FLAG==1‚Ì‚Æ‚«‚Ì‚İƒoƒ‹ƒW‚ª‚Å‚«‚é*/
+		/*ZERO_FLAG==1ï¿½Ì‚Æ‚ï¿½ï¿½Ì‚İƒoï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½*/
 		int ZERO_FLAG = ((zero_index[diag_index * MWB_WARP_SIZE] != 0) || (diag_index == 0))
 			&& ((zero_index[(diag_index + 1) * MWB_WARP_SIZE] == 0)
 				&& (zero_index[(diag_index + 2) * MWB_WARP_SIZE] == 0));
@@ -329,14 +322,14 @@ __device__ void bulge_generation_singleqr
 		}
 		__syncthreads();
 		householder_tau_double = 0.0;
-		/*ƒnƒEƒXƒzƒ‹ƒ_[•ÏŠ·\’zŠJn*/
+		/*ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ÏŠï¿½ï¿½\ï¿½zï¿½Jï¿½n*/
 		if (ZERO_FLAG == 1)
 		{
 			//	if (threadIdx.y < (submatrix_size - diag_index))
 			{
-				//p‚ÌŒvZ
+				//pï¿½ÌŒvï¿½Z
 				householder_vector[0] = cuCsub(mymatrix[(((diag_index)* matrix_size + (diag_index))) * mat_num], householder_tau);
-				//q‚ÌŒvZ//
+				//qï¿½ÌŒvï¿½Z//
 				householder_vector[1] = mymatrix[(((diag_index)* matrix_size + (diag_index + 1))) * mat_num];
 
 				if(complexNormpower2(householder_vector[0])+complexNormpower2(householder_vector[1])==complexNormpower2(householder_vector[0]))
@@ -351,9 +344,9 @@ __device__ void bulge_generation_singleqr
 
 				}
 				cuDoubleComplex alpha;
-				//‘ÎÛ‚Æ‚È‚é—ñ‚ÌÉÙÑ‚ğŒvZ‚·‚é
+				//ï¿½ÎÛ‚Æ‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½Ñ‚ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 				double householder_norm = compute_norm(householder_vector, HOUSEHOLDER_VECTOR_SIZE);
-				//ƒxƒNƒgƒ‹‚ÌƒXƒJƒ‰”{‚ğŒvZ
+				//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÌƒXï¿½Jï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½vï¿½Z
 				alpha = compute_alpha_singleqr(householder_vector[0], householder_norm);
 
 
@@ -387,11 +380,11 @@ __device__ void bulge_generation_singleqr
 		__syncthreads();
 		if (ZERO_FLAG == 1)
 		{
-			//‘Š—•ÏŠ·
-			//¶‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ÏŠï¿½
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 			for (int target_column_index_similar = diag_index + threadIdx.y; target_column_index_similar < submatrix_size; target_column_index_similar += blockDim.y)
 			{
-				//(v*,A)‚ÌŒvZ
+				//(v*,A)ï¿½ÌŒvï¿½Z
 				cuDoubleComplex inner_product;
 				inner_product = ZERO_CUDOUBLECOMPLEX;
 
@@ -403,7 +396,7 @@ __device__ void bulge_generation_singleqr
 					inner_product = cuCfma(cuConj(householder_vector[i]), (mymatrix[index/*((target_column_index_similar)* matrix_size + (diag_index + i)) * mat_num*/]), inner_product);
 					index += mat_num;
 				}
-				//A-2*V*(v*,A)‚ÌŒvZ
+				//A-2*V*(v*,A)ï¿½ÌŒvï¿½Z
 				inner_product.x *= householder_tau_double;
 				inner_product.y *= householder_tau_double;
 
@@ -423,10 +416,10 @@ __device__ void bulge_generation_singleqr
 		if (ZERO_FLAG == 1)
 		{
 			int mmin = ((submatrix_size < (diag_index + 3 + 1)) ? submatrix_size : diag_index + 3 + 1);
-			//‰E‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+			//ï¿½Eï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 			for (int target_row_index_similar = diag_index + threadIdx.y; target_row_index_similar < mmin; target_row_index_similar += blockDim.y)
 			{
-				//(A,v)‚ÌŒvZ
+				//(A,v)ï¿½ÌŒvï¿½Z
 				cuDoubleComplex inner_product;
 				inner_product = ZERO_CUDOUBLECOMPLEX;
 
@@ -439,7 +432,7 @@ __device__ void bulge_generation_singleqr
 
 				}
 
-				//A-2(A,v)v*‚ÌŒvZ
+				//A-2(A,v)v*ï¿½ÌŒvï¿½Z
 				inner_product.x *= householder_tau_double;
 				inner_product.y *= householder_tau_double;
 
@@ -452,17 +445,8 @@ __device__ void bulge_generation_singleqr
 					index += matrix_size * mat_num;
 				}
 			}
-			/*if ((submatrix_size==3)&&(ignore_test((mymatrix[(((diag_index)* matrix_size + (diag_index + 2)))]), complexNorm(mymatrix[(((diag_index + 1) * matrix_size + (diag_index + 2)))]))))
-			{
-				mymatrix[(((diag_index + 1) * matrix_size + (diag_index + 2)))].real = 0.0;
-				mymatrix[(((diag_index + 1) * matrix_size + (diag_index + 2)))].imag = 0.0;
-
-				mymatrix[(((diag_index)* matrix_size + (diag_index + 2)))].real = 0.0;
-				mymatrix[(((diag_index)* matrix_size + (diag_index + 2)))].imag = 0.0;
-			}*/
 		}
 		__syncthreads();
-
 	}
 }
 
@@ -502,7 +486,7 @@ __device__ void bulge_chasing_singleqr
 		int ZERO_FLAG = (zero_index[((diag_index + 1)) * MWB_WARP_SIZE] == 0) && (zero_index[((diag_index + 1 + 1)) * MWB_WARP_SIZE] == 0);
 		if (ZERO_FLAG == 1)
 		{
-			/*ƒoƒ‹ƒW‚ğ¶¬‚Å‚«‚é‚©”»’f*/
+			/*ï¿½oï¿½ï¿½ï¿½Wï¿½ğ¶ï¿½ï¿½Å‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½f*/
 			for (int i = diag_index + 1 + 1 + 1; i < matrix_size + 1; i++)
 			{
 				if (zero_index[(i)* MWB_WARP_SIZE] != 0)
@@ -533,18 +517,18 @@ __device__ void bulge_chasing_singleqr
 			{
 
 			}
-			//‘ÎÛ‚Æ‚È‚é—ñ‚ÌÉÙÑ‚ğŒvZ‚·‚é
+			//ï¿½ÎÛ‚Æ‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½Ñ‚ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 			householder_norm = compute_norm(householder_vector, HOUSEHOLDER_VECTOR_SIZE);
-			//ƒxƒNƒgƒ‹‚ÌƒXƒJƒ‰”{‚ğŒvZ
+			//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÌƒXï¿½Jï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½vï¿½Z
 			alpha = compute_alpha_singleqr(householder_vector[0], householder_norm);
 			householder_vector[0] = cuCsub(householder_vector[0], alpha);
 
-			//‘ÎÛ‚Æ‚È‚é—ñ‚ÌÉÙÑ‚ğŒvZ‚·‚é
+			//ï¿½ÎÛ‚Æ‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½Ñ‚ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 			householder_norm = compute_norm2(householder_vector, HOUSEHOLDER_VECTOR_SIZE);
 			if ((householder_norm != 0.0))
 			//if (!((householder_norm +2.0) == 2.0))
 			{
-				//³‹K‰»
+				//ï¿½ï¿½ï¿½Kï¿½ï¿½
 				householder_tau_double = 2.0 / (householder_norm);
 			}
 			else
@@ -565,18 +549,18 @@ if ((ZERO_FLAG == 0)&&(threadIdx.y == 0))
 		__syncthreads();
 		if ((ZERO_FLAG == 1))
 		{
-			//‘Š—•ÏŠ·
-			//¶‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ÏŠï¿½
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 			for (int target_column_index_similar = diag_index + threadIdx.y; target_column_index_similar < submatrix_size; target_column_index_similar += blockDim.y)
 			{
-				//(v*,A)‚ÌŒvZ
+				//(v*,A)ï¿½ÌŒvï¿½Z
 				cuDoubleComplex inner_product;
 				inner_product = ZERO_CUDOUBLECOMPLEX;
 
 				inner_product = cuCfma(cuConj(householder_vector[0]), (mymatrix[((target_column_index_similar)* matrix_size + (diag_index + 0 + 1)) * mat_num]), inner_product);
 				inner_product = cuCfma(cuConj(householder_vector[1]), (mymatrix[((target_column_index_similar)* matrix_size + (diag_index + 1 + 1)) * mat_num]), inner_product);
 
-				//A-2*V*(v*,A)‚ÌŒvZ
+				//A-2*V*(v*,A)ï¿½ÌŒvï¿½Z
 				inner_product.x *= householder_tau_double;
 				inner_product.y *= householder_tau_double;
 
@@ -593,10 +577,10 @@ if ((ZERO_FLAG == 0)&&(threadIdx.y == 0))
 			int mmin = (submatrix_size < (diag_index + 3 + 1 + 1) ? submatrix_size : (diag_index + 3 + 1 + 1));
 
 
-			//‰E‚©‚çƒnƒEƒXƒzƒ‹ƒ_[s—ñ‚ğ‚©‚¯‚é	
+			//ï¿½Eï¿½ï¿½ï¿½ï¿½nï¿½Eï¿½Xï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 			for (int target_row_index_similar = start_diag_index + threadIdx.y; target_row_index_similar < mmin; target_row_index_similar += blockDim.y)
 			{
-				//(A,v)‚ÌŒvZ
+				//(A,v)ï¿½ÌŒvï¿½Z
 				cuDoubleComplex inner_product;
 				inner_product = ZERO_CUDOUBLECOMPLEX;
 
@@ -605,7 +589,7 @@ if ((ZERO_FLAG == 0)&&(threadIdx.y == 0))
 				inner_product = cuCfma(mymatrix[((diag_index + 1 + 0) * matrix_size + target_row_index_similar) * mat_num], (householder_vector[0]), inner_product);
 				inner_product = cuCfma(mymatrix[((diag_index + 1 + 1) * matrix_size + target_row_index_similar) * mat_num], (householder_vector[1]), inner_product);
 
-				//A-2(A,v)v*‚ÌŒvZ
+				//A-2(A,v)v*ï¿½ÌŒvï¿½Z
 				inner_product.x *= householder_tau_double;
 				inner_product.y *= householder_tau_double;
 
@@ -633,9 +617,6 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 	char* __restrict__ flags
 )
 {
-
-	//printf("tokura_zhseqr_normal_MWB_kernel start\n");
-
 	const int matrix_id = threadIdx.x;
 	const int global_matrix_id = matrix_id + blockIdx.x * MWB_WARP_SIZE;
 
@@ -646,9 +627,6 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 	int prev_computed_eigenvalues_num = 0;
 	int submatrix_size = matrix_size;
 	int iteration = 0;
-
-
-
 	extern __shared__ int shared_dynamic[];
 	int* zero_index = &shared_dynamic[0];
 	int* eig_num_shared = &zero_index[(matrix_size + 1) * MWB_WARP_SIZE];
@@ -662,22 +640,6 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 	{
 		return;
 	}
-
-	/*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 0)
-	{
-		for (int i = 0; i < matrix_size; i++)
-		{
-			for (int j = 0; j < matrix_size; j++)
-			{
-				printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-			}
-			printf("\n");
-		}
-		printf("\n");
-	}*/
-
-
-
 
 	if (threadIdx.y == 0)
 	{
@@ -693,49 +655,15 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 	while (its != matrix_size * matrix_size * matrix_size *matrix_size)
 	{
 		its++;
-		/*s—ñ“àƒSƒ~‚Ì’lœ‹ŠJn*/
+		/*ï¿½sï¿½ï¿½ï¿½ï¿½Sï¿½~ï¿½Ì’lï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½n*/
 		for (int i = 2 + threadIdx.y; i < matrix_size; i += blockDim.y)
 		{
 			mymatrix[((i - 2) * matrix_size + i) * mat_num] = ZERO_CUDOUBLECOMPLEX;
 		}
 
-		//‰E‰º‚©‚çŒÅ—L’l‚ª‚Ç‚±‚Ü‚Å‹‚Ü‚Á‚½‚©’²‚×‚é
-		/*if (threadIdx.y == 0)
-		{
-			for (int i = matrix_size - 1; i >= 2; i--)
-			{
-				if (zero_index[i] != 0)
-				{
-					max_n = i;
-					continue;
-				}
-				else if (zero_index[((i - 1))] != 0)
-				{
-					max_n = i - 1;
-					continue;
-				}
-				break;
-			}
-		}*/
-
-
-
-
-	/*	if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 0)
-		{
-			for (int i = 0; i < matrix_size; i++)
-			{
-				for (int j = 0; j < matrix_size; j++)
-				{
-					printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-				}
-				printf("\n");
-			}
-			printf("\n");
-		}*/
 		__syncthreads();
 
-		//•›‘ÌŠi—v‘f‚ª\•ª‚Éû‘©‚µ‚½‚©‚ğ’²‚×‚é
+		//ï¿½ï¿½ï¿½ÌŠiï¿½vï¿½fï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ’²‚×‚ï¿½
 		for (int diag_index = matrix_size - 1 - threadIdx.y; 0 < diag_index; diag_index -= blockDim.y)
 		{
 			if (zero_index[diag_index * MWB_WARP_SIZE] == 0)
@@ -748,11 +676,6 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 					tmp = 1.0;
 				}
 
-				/*if (ignore_test(complexNorm(mymatrix[((diag_index - 1) * matrix_size + diag_index) * mat_num]), tmp))
-				{
-					zero_index[diag_index * MWB_WARP_SIZE] = diag_index;
-				}*/
-			
 				cuDoubleComplex tmp_complex;
 
 				tmp_complex.x=fabs(mymatrix[(diag_index * matrix_size + diag_index) * mat_num].x)+fabs(mymatrix[((diag_index - 1) * matrix_size + (diag_index - 1)) * mat_num].x);
@@ -767,7 +690,7 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 			}
 		}
 		__syncthreads();
-		//ÀÛ‚ÉŒÅ—L’l‚ª‰½ŒÂ‹‚Ü‚Á‚½‚©‚ğ’²‚×‚é
+		//ï¿½ï¿½ï¿½Û‚ÉŒÅ—Lï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Â‹ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ’²‚×‚ï¿½
 		int computed_eigenvalues_num = 0;
 		int prev_diag_index;
 		if (threadIdx.y == 0)
@@ -798,7 +721,7 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 		}
 		__syncthreads();
 		computed_eigenvalues_num = eig_num_shared[0];
-		//ŒÅ—L’l‚ª‚·‚×‚ÄŒvZ‚³‚ê‚ê‚ÎAƒ‹[ƒv‚ğ”²‚¯‚é
+		//ï¿½Å—Lï¿½lï¿½ï¿½ï¿½ï¿½ï¿½×‚ÄŒvï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½ÎAï¿½ï¿½ï¿½[ï¿½vï¿½ğ”²‚ï¿½ï¿½ï¿½
 		if (computed_eigenvalues_num == matrix_size)
 		{
 			break;
@@ -817,23 +740,10 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 		}
 		prev_computed_eigenvalues_num = computed_eigenvalues_num;
 
-		/*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 0)
-		{
-			printf("BEFORE ƒoƒ‹ƒW¶¬\n");
-			for (int i = 0; i < matrix_size; i++)
-			{
-				for (int j = 0; j < matrix_size; j++)
-				{
-					printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-				}
-				printf("\n");
-			}
-			printf("\n");
-		}*/
 		__syncthreads();
 
 
-		//ƒoƒ‹ƒW¶¬
+		//ï¿½oï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½
 		bulge_generation_singleqr
 		(
 			matrix_size,
@@ -843,19 +753,7 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 			iteration,
 			matrix_size/*max_n*/
 		);
-		/*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 0)
-		{
-			printf("ƒoƒ‹ƒW¶¬\n");
-			for (int i = 0; i < matrix_size; i++)
-			{
-				for (int j = 0; j < matrix_size; j++)
-				{
-					printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-				}
-				printf("\n");
-			}
-			printf("\n");
-		}*/
+
 		__syncthreads();
 		bulge_chasing_singleqr
 		(
@@ -875,29 +773,8 @@ __global__ void tokura_zhseqr_normal_MWB_kernel
 	{
 		//printf("NOT COMPUTED\n");
 		flags[global_matrix_id] = 1;
-
-
-
-		/*if (threadIdx.y == 0)
-		{
-			//printf("ƒoƒ‹ƒW¶¬\n");
-			for (int i = 0; i < matrix_size; i++)
-			{
-				for (int j = 0; j < matrix_size; j++)
-				{
-					printf("(%e %e) ", mymatrix[(j * matrix_size + i) * mat_num].x, mymatrix[(j * matrix_size + i) * mat_num].y);
-				}
-				printf("\n");
-			}
-			printf("\n");
-		}*/
 	}
 	__syncthreads();
-
-
-
-
-
 
 	if (threadIdx.y == 0)
 	{
